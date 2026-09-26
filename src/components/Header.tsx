@@ -197,7 +197,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* User Profile & Auth / Logout Menu */}
           <div className="relative">
             {user ? (
-              <div>
+              <div className="flex items-center gap-2">
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className="flex items-center gap-2 rounded-xl bg-[#171f33] p-1.5 pr-2.5 border border-white/10 hover:border-white/20 transition-all"
@@ -207,18 +207,32 @@ export const Header: React.FC<HeaderProps> = ({
                     alt={user.name}
                     className="h-6 w-6 rounded-lg object-cover ring-1 ring-white/20"
                   />
-                  <span className="hidden xl:inline text-xs font-semibold text-white max-w-[100px] truncate">
-                    {user.name.split(' ')[0]}
-                  </span>
+                  <div className="hidden sm:flex flex-col text-left">
+                    <span className="text-xs font-semibold text-white max-w-[100px] truncate leading-tight">
+                      {user.name.split(' ')[0]}
+                    </span>
+                    <span className="text-[9px] text-purple-400 font-medium leading-tight">
+                      {user.role}
+                    </span>
+                  </div>
                   <ChevronDown size={13} className="text-slate-400" />
                 </button>
 
+                <button
+                  onClick={onLogout}
+                  title="Sign Out (Logout)"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 text-xs font-semibold transition-all hover:scale-102"
+                >
+                  <LogOut size={13} />
+                  <span className="hidden md:inline">Log Out</span>
+                </button>
+
                 {isUserMenuOpen && (
-                  <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-[#171f33] border border-white/10 shadow-2xl p-2 z-50">
+                  <div className="absolute right-0 top-12 w-56 rounded-2xl bg-[#171f33] border border-white/10 shadow-2xl p-2 z-50">
                     <div className="px-3 py-2 border-b border-white/5">
                       <div className="font-bold text-white text-xs truncate">{user.name}</div>
                       <div className="text-[11px] text-slate-400 font-mono truncate">{user.email}</div>
-                      <div className="mt-1 inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                      <div className="mt-1 inline-block text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30">
                         {user.role}
                       </div>
                     </div>

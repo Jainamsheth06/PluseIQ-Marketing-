@@ -39,14 +39,17 @@ export default function App() {
   const [isCreateCampaignOpen, setIsCreateCampaignOpen] = useState(false);
 
   // Authentication State
-  const [currentUser, setCurrentUser] = useState<AuthUser | null>({
-    name: 'Alex Sterling',
-    email: 'alex.sterling@apexretail.io',
-    role: 'Admin',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-    company: 'Apex Retail Global',
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => {
+    try {
+      const saved = localStorage.getItem('pulseiq_active_user');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {
+      console.warn('LocalStorage unavailable:', e);
+    }
+    return null;
   });
   const [authModalMode, setAuthModalMode] = useState<'signin' | 'register'>('signin');
+  const [authNotice, setAuthNotice] = useState<string | null>(null);
 
   // Core App State
   const [channels, setChannels] = useState(initialChannels);
@@ -62,14 +65,25 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    try {
+      localStorage.removeItem('pulseiq_active_user');
+    } catch (e) {
+      console.warn('LocalStorage unavailable:', e);
+    }
     setCurrentUser(null);
-    setActiveTab('auth');
     setAuthModalMode('signin');
+    setAuthNotice('You have safely signed out of PulseIQ.');
     confetti({ particleCount: 20, spread: 30 });
   };
 
   const handleLoginSuccess = (user: AuthUser) => {
+    try {
+      localStorage.setItem('pulseiq_active_user', JSON.stringify(user));
+    } catch (e) {
+      console.warn('LocalStorage unavailable:', e);
+    }
     setCurrentUser(user);
+    setAuthNotice(null);
     setActiveTab('overview');
   };
 
@@ -221,6 +235,23 @@ export default function App() {
         return null;
     }
   };
+
+  // If not authenticated, present full-screen secure Auth View
+  if (!currentUser) {
+    return (
+      <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] flex flex-col justify-center items-center p-3 sm:p-6 antialiased selection:bg-purple-600 selection:text-white relative overflow-hidden">
+        {/* Ambient atmospheric glows */}
+        <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <AuthView
+          initialMode={authModalMode}
+          onLoginSuccess={handleLoginSuccess}
+          notice={authNotice}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#0b1326] text-[#dae2fd] flex flex-col antialiased">

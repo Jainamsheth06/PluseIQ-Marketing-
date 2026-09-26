@@ -25,12 +25,14 @@ interface AuthViewProps {
   initialMode?: 'signin' | 'register';
   onLoginSuccess: (user: AuthUser) => void;
   onCancel?: () => void;
+  notice?: string | null;
 }
 
 export const AuthView: React.FC<AuthViewProps> = ({
   initialMode = 'signin',
   onLoginSuccess,
   onCancel,
+  notice,
 }) => {
   const [authMode, setAuthMode] = useState<'signin' | 'register'>(initialMode);
   const [showPassword, setShowPassword] = useState(false);
@@ -351,14 +353,14 @@ export const AuthView: React.FC<AuthViewProps> = ({
             </div>
 
             {/* Status notification banner */}
-            {statusBanner && (
+            {(statusBanner || notice) && (
               <div className={`mt-4 p-3 rounded-xl text-xs flex items-center gap-2 border ${
-                statusBanner.type === 'success' 
-                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
-                  : 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                statusBanner?.type === 'error' 
+                  ? 'bg-rose-500/10 border-rose-500/30 text-rose-300'
+                  : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
               }`}>
-                {statusBanner.type === 'success' ? <CheckCircle2 size={16} className="shrink-0" /> : <AlertCircle size={16} className="shrink-0" />}
-                <span>{statusBanner.text}</span>
+                {statusBanner?.type === 'error' ? <AlertCircle size={16} className="shrink-0" /> : <CheckCircle2 size={16} className="shrink-0" />}
+                <span>{statusBanner ? statusBanner.text : notice}</span>
               </div>
             )}
 

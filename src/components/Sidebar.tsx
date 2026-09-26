@@ -187,7 +187,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </a>
 
           {user ? (
-            <div className="flex items-center justify-between gap-2 px-2 py-1 bg-[#171f33]/60 rounded-xl border border-white/5">
+            <div className="flex items-center justify-between gap-2 px-2.5 py-2 bg-[#171f33]/80 rounded-xl border border-white/5">
               <div className="flex items-center gap-2.5 min-w-0">
                 <img
                   src={user.avatar}
@@ -196,15 +196,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 />
                 <div className="min-w-0 flex-1">
                   <div className="text-xs font-semibold text-white truncate">{user.name}</div>
-                  <div className="text-[10px] text-slate-400 truncate">{user.role}</div>
+                  <div className="text-[10px] text-purple-300 font-mono truncate">{user.role}</div>
                 </div>
               </div>
               <button
                 onClick={onLogout}
-                title="Log Out"
-                className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-white/5 transition-colors shrink-0"
+                title="Log Out of PulseIQ"
+                className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-red-400 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-[11px] font-semibold transition-all shrink-0 hover:scale-102"
               >
-                <LogOut size={15} />
+                <LogOut size={12} />
+                <span>Logout</span>
               </button>
             </div>
           ) : (
