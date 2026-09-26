@@ -1,0 +1,8 @@
+{
+  "name": "Remix PulseIQ Marketing Intelligence",
+  "description": "Cross-channel marketing intelligence, real-time telemetry, predictive attribution, campaign pacing, and autonomous AI recommendations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
